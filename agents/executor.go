@@ -10,6 +10,7 @@ import (
 	"github.com/tmc/langchaingo/chains"
 	"github.com/tmc/langchaingo/schema"
 	"github.com/tmc/langchaingo/tools"
+	"github.com/tmc/langchaingo/trace"
 )
 
 const _intermediateStepsOutputKey = "intermediateSteps"
@@ -136,6 +137,7 @@ func (e Executor) doAction(
 		}), nil
 	}
 
+	ctx = trace.NewRunContextWithName(ctx, action.Tool)
 	observation, err := tool.Call(ctx, action.ToolInput)
 	if err != nil {
 		return nil, err

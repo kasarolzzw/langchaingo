@@ -5,6 +5,7 @@ import (
 
 	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/schema"
+	"github.com/tmc/langchaingo/trace"
 )
 
 // VectorStore is the interface for saving and querying documents in the
@@ -26,6 +27,7 @@ var _ schema.Retriever = Retriever{}
 
 // GetRelevantDocuments returns documents using the vector store.
 func (r Retriever) GetRelevantDocuments(ctx context.Context, query string) ([]schema.Document, error) {
+	ctx = trace.NewRunContext(ctx)
 	if r.CallbacksHandler != nil {
 		r.CallbacksHandler.HandleRetrieverStart(ctx, query)
 	}

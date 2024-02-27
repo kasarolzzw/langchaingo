@@ -7,6 +7,7 @@ import (
 
 	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/schema"
+	"github.com/tmc/langchaingo/trace"
 )
 
 // Key name used to store the intermediate steps in the output, when configured.
@@ -42,6 +43,8 @@ func Call(ctx context.Context, c Chain, inputValues map[string]any, options ...C
 		fullValues[key] = value
 	}
 
+	// inject run context
+	ctx = trace.NewRunContext(ctx)
 	callbacksHandler := getChainCallbackHandler(c)
 	if callbacksHandler != nil {
 		callbacksHandler.HandleChainStart(ctx, inputValues)

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/tmc/langchaingo/schema"
+	"github.com/tmc/langchaingo/trace"
 )
 
 // LLM is an alias for model, for backwards compatibility.
@@ -40,6 +41,7 @@ func GenerateFromSinglePrompt(ctx context.Context, llm Model, prompt string, opt
 		Parts: []ContentPart{TextContent{prompt}},
 	}
 
+	ctx = trace.NewRunContext(ctx)
 	resp, err := llm.GenerateContent(ctx, []MessageContent{msg}, options...)
 	if err != nil {
 		return "", err
